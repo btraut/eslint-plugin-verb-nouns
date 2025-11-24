@@ -1,6 +1,6 @@
 {
   "name": "eslint-plugin-no-process-env",
-  "version": "1.0.0",
+  "version": "1.0.1",
   "description": "ESLint plugin that bans direct process.env access in application code",
   "type": "module",
   "main": "./dist/index.cjs",
@@ -16,6 +16,14 @@
   "files": [
     "dist"
   ],
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/btraut/eslint-plugin-no-process-env.git"
+  },
+  "bugs": {
+    "url": "https://github.com/btraut/eslint-plugin-no-process-env/issues"
+  },
+  "homepage": "https://github.com/btraut/eslint-plugin-no-process-env#readme",
   "keywords": [
     "eslint",
     "eslintplugin",
