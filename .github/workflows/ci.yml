@@ -1,0 +1,66 @@
+name: CI
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+
+permissions:
+  contents: read
+  pull-requests: write
+
+jobs:
+  lint-and-test:
+    name: Lint & Test (Node ${{ matrix.node }})
+    runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        node: [18, 20, 22]
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: ${{ matrix.node }}
+          cache: npm
+
+      - name: Install dependencies
+        run: npm ci
+
+      - name: ESLint (reviewdog)
+        if: matrix.node == '20'
+        uses: reviewdog/action-eslint@v1
+        with:
+          github_token: ${{ secrets.GITHUB_TOKEN }}
+          reporter: github-pr-review
+          level: error
+          eslint_flags: "--ext .ts src test"
+          fail_on_error: true
+
+      - name: Build
+        run: npm run build --if-present
+
+      - name: Run tests (vitest)
+        run: |
+          mkdir -p reports
+          npm run test -- --reporter=dot --reporter=junit --outputFile=reports/vitest-junit.xml
+
+      - name: Test report comment
+        if: always()
+        uses: dorny/test-reporter@v1
+        with:
+          name: Vitest (Node ${{ matrix.node }})
+          path: reports/vitest-junit.xml
+          reporter: jest-junit
+          fail-on-error: false
+          only-summary: true
+          comment: on-failure
+
+      - name: Upload reports
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: reports-${{ matrix.node }}
+          path: reports
