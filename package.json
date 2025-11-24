@@ -3,12 +3,13 @@
   "version": "0.1.0",
   "description": "ESLint plugin that bans direct process.env access in application code",
   "type": "module",
-  "main": "./dist/index.js",
+  "main": "./dist/index.cjs",
   "types": "./dist/index.d.ts",
   "exports": {
     ".": {
+      "types": "./dist/index.d.ts",
       "import": "./dist/index.js",
-      "types": "./dist/index.d.ts"
+      "require": "./dist/index.cjs"
     },
     "./package.json": "./package.json"
   },
@@ -26,10 +27,10 @@
   "author": "Brent Traut",
   "license": "MIT",
   "engines": {
-    "node": ">=18.18"
+    "node": ">=14.17"
   },
   "peerDependencies": {
-    "eslint": "^9.0.0"
+    "eslint": "^8.57.0 || ^9.0.0 || ^10.0.0-alpha"
   },
   "scripts": {
     "build": "tsup",

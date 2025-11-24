@@ -16,9 +16,9 @@ This rule won't help your app crash less, but it _will_ help it crash earlier an
 npm i -D eslint eslint-plugin-no-process-env
 ```
 
-Requires Node 18+ and ESLint 9+ (flat config).
+Tested with ESLint 8.57+, 9.x, and 10 alpha. Node 14.17+ for ESLint 8, 18.18+ for ESLint 9, 20.19+ for ESLint 10.
 
-## Usage (flat config)
+## Usage (flat config, ESLint 9+/10)
 
 ```ts
 // eslint.config.mjs
@@ -32,6 +32,19 @@ export default [
     },
   },
 ];
+```
+
+## Usage (eslintrc, ESLint 8)
+
+```js
+// .eslintrc.cjs
+module.exports = {
+  plugins: ['no-process-env'],
+  rules: {
+    'no-process-env/no-process-env': 'error',
+  },
+  extends: ['plugin:no-process-env/legacy'],
+};
 ```
 
 ## The `env.ts` pattern
