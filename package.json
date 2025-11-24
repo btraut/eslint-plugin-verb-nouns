@@ -1,0 +1,57 @@
+{
+  "name": "eslint-plugin-no-process-env",
+  "version": "0.1.0",
+  "description": "ESLint plugin that bans direct process.env access in application code",
+  "type": "module",
+  "main": "./dist/index.js",
+  "types": "./dist/index.d.ts",
+  "exports": {
+    ".": {
+      "import": "./dist/index.js",
+      "types": "./dist/index.d.ts"
+    },
+    "./package.json": "./package.json"
+  },
+  "files": [
+    "dist"
+  ],
+  "keywords": [
+    "eslint",
+    "eslintplugin",
+    "process.env",
+    "env",
+    "configuration",
+    "security"
+  ],
+  "author": "Brent Traut",
+  "license": "MIT",
+  "engines": {
+    "node": ">=18.18"
+  },
+  "peerDependencies": {
+    "eslint": "^9.0.0"
+  },
+  "scripts": {
+    "build": "tsup",
+    "clean": "rimraf dist",
+    "lint": "eslint src test --ext .ts",
+    "test": "vitest run",
+    "dev": "vitest watch",
+    "prepare": "npm run build"
+  },
+  "devDependencies": {
+    "@eslint/js": "^9.39.1",
+    "@types/node": "^22.8.0",
+    "@typescript-eslint/eslint-plugin": "^8.12.2",
+    "@typescript-eslint/parser": "^8.12.2",
+    "@typescript-eslint/rule-tester": "^8.12.2",
+    "@typescript-eslint/utils": "^8.12.2",
+    "eslint": "^9.39.1",
+    "rimraf": "^6.0.1",
+    "tsup": "^8.5.1",
+    "typescript": "^5.7.2",
+    "typescript-eslint": "^8.47.0",
+    "vitest": "^4.0.6"
+  },
+  "packageManager": "npm@10"
+}
