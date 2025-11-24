@@ -14,6 +14,9 @@ This rule won't help your app crash less, but it _will_ help it crash earlier an
 
 ```sh
 npm i -D eslint eslint-plugin-no-process-env
+yarn add -D eslint eslint-plugin-no-process-env
+pnpm add -D eslint eslint-plugin-no-process-env
+bun add -d eslint eslint-plugin-no-process-env
 ```
 
 Tested with ESLint 8.57+, 9.x, and 10 alpha. Node 14.17+ for ESLint 8, 18.18+ for ESLint 9, 20.19+ for ESLint 10.
