@@ -1,6 +1,6 @@
 {
   "name": "eslint-plugin-no-process-env",
-  "version": "0.1.0",
+  "version": "1.0.0",
   "description": "ESLint plugin that bans direct process.env access in application code",
   "type": "module",
   "main": "./dist/index.cjs",
