@@ -1,37 +1,42 @@
-# eslint-plugin-no-process-env
+# eslint-plugin-verb-nouns
 
-Disallow direct `process.env` access in application code and enforce a centralized environment configuration pattern.
+Catch incorrect use of noun forms like "setup", "login", "signup" when verb forms ("set up", "log in", "sign up") are needed.
 
 ## Why would I want this?
 
-Every use of `process.env` in application code is a dependency on your external environment, and those dependencies are often unsatisfied at runtime, lack validation, and have inconsistent fallbacks.
+Words like "setup", "login", and "signup" are nouns or adjectives. When used as verbs, they should be written as two words: "set up", "log in", and "sign up".
 
-It's generally a good practice to centralize env var access into a single configuration file which makes them explicit and self-documenting, and creates an opportunity to validate, coerce types, and set default values where appropriate.
+- **Noun/Adjective**: "The login screen", "Initial setup", "Signup form"
+- **Verb**: "Log in to your account", "Set up your profile", "Sign up for free"
 
-This rule won't help your app crash less, but it _will_ help it crash earlier and more loudly!
+This rule uses heuristics to catch the most common mistakes in UI copy (buttons, labels, placeholders) while allowing legitimate noun usage.
+
+## Is this really necessary?
+
+I get it. This is pedantic, and it usually results in one-character changes. But nonetheless, it's a mistake so common that even LLMs mess it up all the time. Once you see it, you'll never unsee it.
 
 ## Install
 
 ```sh
-npm i -D eslint eslint-plugin-no-process-env
-yarn add -D eslint eslint-plugin-no-process-env
-pnpm add -D eslint eslint-plugin-no-process-env
-bun add -d eslint eslint-plugin-no-process-env
+npm i -D eslint eslint-plugin-verb-nouns
+yarn add -D eslint eslint-plugin-verb-nouns
+pnpm add -D eslint eslint-plugin-verb-nouns
+bun add -d eslint eslint-plugin-verb-nouns
 ```
 
-Tested with ESLint 8.57+, 9.x, and 10 alpha. Node 14.17+ for ESLint 8, 18.18+ for ESLint 9, 20.19+ for ESLint 10.
+Tested with ESLint 8.57+, 9.x, and 10 alpha.
 
 ## Usage (flat config, ESLint 9+/10)
 
 ```ts
 // eslint.config.mjs
-import noProcessEnv from "eslint-plugin-no-process-env";
+import verbNouns from "eslint-plugin-verb-nouns";
 
 export default [
   {
-    plugins: { "no-process-env": noProcessEnv },
+    plugins: { "verb-nouns": verbNouns },
     rules: {
-      "no-process-env/no-process-env": "error",
+      "verb-nouns/no-verb-noun-confusion": "error",
     },
   },
 ];
@@ -42,59 +47,55 @@ export default [
 ```js
 // .eslintrc.cjs
 module.exports = {
-  plugins: ["no-process-env"],
+  plugins: ["verb-nouns"],
   rules: {
-    "no-process-env/no-process-env": "error",
+    "verb-nouns/no-verb-noun-confusion": "error",
   },
-  extends: ["plugin:no-process-env/legacy"],
+  extends: ["plugin:verb-nouns/legacy"],
 };
 ```
 
-## The `env.ts` pattern
-
-Creating a boundary around your environment configuration is a good practice. Using a validation library like Zod makes it even easier to enforce consistent types and fallbacks.
-
-1. Create an `env.ts` at the root of your app:
-
-```ts
-// env.ts
-import { z } from "zod";
-
-const schema = z.object({
-  DATABASE_URL: z.string().url(),
-  NODE_ENV: z.enum(["development", "test", "production"]),
-  DEBUG_LOGGING_ENABLED: z
-    .string()
-    .default("true")
-    .transform((val) => val !== "false"),
-});
-
-export const ENV = schema.parse(process.env);
-```
-
-2. Import from `env.ts` elsewhere:
-
-```ts
-// db/client.ts
-import { ENV } from "./env";
-
-const client = new Client({
-  connectionString: ENV.DATABASE_URL,
-});
-```
-
-3. `process.env` is allowed only inside `env.ts` / `env.js`; everywhere else the rule will error.
-
 ## What the rule catches
 
-- `process.env.FOO`
-- `const { env } = process;`
-- Bracket access: `process['env']`
+The `no-verb-noun-confusion` rule flags likely verb usage of:
 
-It ignores:
+- **"Setup"** → should be "Set up"
+- **"Login"** → should be "Log in"
+- **"Signup"** → should be "Sign up"
 
-- Any code inside `env.ts` or `env.js`.
-- Shadowed `process` identifiers (e.g., `function process() {}`).
+### Examples
+
+```jsx
+// ❌ Bad - these are verbs, should be two words
+<button>Setup</button>
+<button>Login</button>
+<button>Signup</button>
+<button>Setup your account</button>
+<button>Login to continue</button>
+<button aria-label="Signup now">Join</button>
+
+// ✅ Good - proper verb forms
+<button>Set up</button>
+<button>Log in</button>
+<button>Sign up</button>
+<button>Set up your account</button>
+<button>Log in to continue</button>
+<button aria-label="Sign up now">Join</button>
+
+// ✅ Good - noun/adjective usage (allowed)
+<h1>Initial setup</h1>
+<h1>Login screen</h1>
+<p>Complete the signup form</p>
+```
+
+### Heuristics
+
+The rule only checks:
+
+- JSX text content
+- String literals in `aria-label`, `title`, and `placeholder` attributes
+
+It allows known noun phrases like "initial setup", "login screen", "signup form", etc.
 
 ## Options
 
@@ -105,8 +106,6 @@ None. The rule is purposefully minimal.
 - `npm run lint` — lint sources and tests
 - `npm run test` — run rule tests (Vitest + ESLint RuleTester)
 - `npm run build` — bundle to `dist/` via TSUP (ESM + d.ts)
-
-The `prepare` script builds automatically on install from git, which matches npm’s publishing flow.
 
 ## License
 

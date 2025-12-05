@@ -1,31 +1,31 @@
 import type { TSESLint } from "@typescript-eslint/utils";
-import noProcessEnv from "./rules/no-process-env";
+import noVerbNounConfusion from "./rules/no-verb-noun-confusion";
 
 const plugin = {
   meta: {
-    name: "eslint-plugin-no-process-env",
-    version: "0.1.0",
+    name: "eslint-plugin-verb-nouns",
+    version: "1.0.0",
   },
   rules: {
-    "no-process-env": noProcessEnv,
+    "no-verb-noun-confusion": noVerbNounConfusion,
   },
   configs: {
     // Flat config (ESLint 9+/10)
     recommended: [
       {
         plugins: {
-          "no-process-env": null as unknown as TSESLint.FlatConfig.Plugin,
+          "verb-nouns": null as unknown as TSESLint.FlatConfig.Plugin,
         },
         rules: {
-          "no-process-env/no-process-env": "error",
+          "verb-nouns/no-verb-noun-confusion": "error",
         },
       },
     ],
     // eslintrc config (ESLint 8)
     legacy: {
-      plugins: ["no-process-env"],
+      plugins: ["verb-nouns"],
       rules: {
-        "no-process-env/no-process-env": "error",
+        "verb-nouns/no-verb-noun-confusion": "error",
       },
     },
   },
@@ -35,7 +35,7 @@ const plugin = {
 if (Array.isArray(plugin.configs?.recommended)) {
   const [recommended] = plugin.configs.recommended;
   if (recommended && recommended.plugins) {
-    (recommended.plugins as Record<string, unknown>)["no-process-env"] = plugin;
+    (recommended.plugins as Record<string, unknown>)["verb-nouns"] = plugin;
   }
 }
 
