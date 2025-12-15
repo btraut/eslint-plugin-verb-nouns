@@ -1,6 +1,6 @@
 {
   "name": "eslint-plugin-verb-nouns",
-  "version": "1.0.0",
+  "version": "1.1.0",
   "description": "ESLint plugin that catches incorrect use of noun forms like 'setup', 'login', 'signup' when verb forms are needed",
   "type": "module",
   "main": "./dist/index.cjs",
