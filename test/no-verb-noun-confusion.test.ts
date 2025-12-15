@@ -82,6 +82,23 @@ ruleTester.run("no-verb-noun-confusion", rule, {
       name: "setup wizard is allowed",
       code: "<h1>Setup wizard</h1>",
     },
+    // Cleanup noun phrases
+    {
+      name: "clean up as verb",
+      code: "<button>Clean up</button>",
+    },
+    {
+      name: "clean up your files",
+      code: "<button>Clean up your files</button>",
+    },
+    {
+      name: "cleanup crew is allowed",
+      code: "<h1>Cleanup crew</h1>",
+    },
+    {
+      name: "database cleanup is allowed",
+      code: "<p>Running database cleanup</p>",
+    },
     // Non-UI copy strings are ignored
     {
       name: "non-UI string literal",
@@ -147,6 +164,27 @@ ruleTester.run("no-verb-noun-confusion", rule, {
       name: "login in placeholder",
       code: '<input placeholder="Login here" />',
       errors: [{ messageId: "noVerbLogin" }],
+    },
+    // Cleanup as verb
+    {
+      name: "cleanup as single word button",
+      code: "<button>Cleanup</button>",
+      errors: [{ messageId: "noVerbCleanup" }],
+    },
+    {
+      name: "cleanup your files",
+      code: "<button>Cleanup your files</button>",
+      errors: [{ messageId: "noVerbCleanup" }],
+    },
+    {
+      name: "cleanup in aria-label",
+      code: '<button aria-label="Cleanup">Icon</button>',
+      errors: [{ messageId: "noVerbCleanup" }],
+    },
+    {
+      name: "cleanup now",
+      code: "<button>Cleanup now</button>",
+      errors: [{ messageId: "noVerbCleanup" }],
     },
   ],
 });

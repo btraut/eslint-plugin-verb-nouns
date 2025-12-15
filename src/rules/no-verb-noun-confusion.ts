@@ -1,6 +1,6 @@
 import type { TSESTree, TSESLint } from "@typescript-eslint/utils";
 
-type MessageIds = "noVerbSetup" | "noVerbLogin" | "noVerbSignup";
+type MessageIds = "noVerbSetup" | "noVerbLogin" | "noVerbSignup" | "noVerbCleanup";
 
 function isLikelyUiCopy(node: TSESTree.Node): boolean {
   // Heuristic: JSX text / attributes that are often shown to users.
@@ -32,6 +32,12 @@ function isAllowedNounPhrase(text: string): boolean {
     "login page",
     "signup form",
     "signup page",
+    "cleanup crew",
+    "cleanup process",
+    "cleanup script",
+    "database cleanup",
+    "memory cleanup",
+    "disk cleanup",
   ];
   const lower = text.toLowerCase();
   return allowed.some((phrase) => lower.includes(phrase));
@@ -52,6 +58,8 @@ const rule: TSESLint.RuleModule<MessageIds, []> = {
         'Prefer "log in" as a verb. Reserve "login" for nouns/adjectives (e.g. "Login screen").',
       noVerbSignup:
         'Prefer "sign up" as a verb. Reserve "signup" for nouns/adjectives (e.g. "Signup form").',
+      noVerbCleanup:
+        'Prefer "clean up" as a verb. Reserve "cleanup" for nouns/adjectives (e.g. "Cleanup crew").',
     },
   },
   defaultOptions: [],
@@ -80,6 +88,10 @@ const rule: TSESLint.RuleModule<MessageIds, []> = {
         context.report({ node, messageId: "noVerbSignup" });
         return;
       }
+      if (/^cleanup$/i.test(text)) {
+        context.report({ node, messageId: "noVerbCleanup" });
+        return;
+      }
 
       // "Setup your account", "Login to continue", "Signup now", etc.
       if (/^setup\b/i.test(text)) {
@@ -92,6 +104,10 @@ const rule: TSESLint.RuleModule<MessageIds, []> = {
       }
       if (/^signup\b/i.test(text)) {
         context.report({ node, messageId: "noVerbSignup" });
+        return;
+      }
+      if (/^cleanup\b/i.test(text)) {
+        context.report({ node, messageId: "noVerbCleanup" });
         return;
       }
     }
